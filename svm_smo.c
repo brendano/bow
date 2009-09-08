@@ -13,6 +13,8 @@
  * instead of values in cvect */
 //#define DEBUG
 
+#define MAXDOUBLE DBL_MAX
+
 inline int make_set(int bmap_size, int max_list_size, struct set *s) {
   int i;
   s->items = (int *) malloc(sizeof(int)*max_list_size);

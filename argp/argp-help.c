@@ -27,7 +27,6 @@
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
-#include <malloc.h>
 #include <ctype.h>
 
 #if HAVE_STRINGS_H

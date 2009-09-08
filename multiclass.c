@@ -1050,7 +1050,7 @@ multiclass_train ()
 void
 bow_sort_scores (bow_score *scores, int count)
 {
-  static int score_compare (const void *x, const void *y)
+  int score_compare (const void *x, const void *y)
     {
       if (((bow_score *)x)->weight > ((bow_score *)y)->weight)
 	return -1;
@@ -1255,7 +1255,7 @@ multiclass_cis_scores_index (int *cis, int cis_size,
 	    break;
 	}
       return si;
-    next_si:
+    next_si: continue;
     }
   return -1;
 }
@@ -1339,7 +1339,7 @@ multiclass_explore_cis_greedy0 (crossbow_doc *doc,
 	  max_si = si;
 	  max_ci = ci;
 	}
-    next_class1:
+    next_class1: continue;
     }
 
   if (local_exclude_cis_size + 1 < exclude_cis_capacity/2
@@ -1420,9 +1420,9 @@ multiclass_explore_cis_greedy0 (crossbow_doc *doc,
 	      max_ci = ci;
 	      max_ci2 = ci2;
 	    }
-	next_class22:
+	next_class22: continue;
 	}
-    next_class2:
+    next_class2: continue;
     }
   assert (max_si >= 0);
 

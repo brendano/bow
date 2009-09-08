@@ -261,7 +261,6 @@ error_t svm_parse_opt (int key, char *arg, struct argp_state *state) {
     case 4:
       kernel = svm_kernel_fisher;
       break;
-    default:
     }
     break;
   case AL_TEST_IN_TRAIN_ARG:

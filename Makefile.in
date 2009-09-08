@@ -101,7 +101,7 @@ all: libbow.a $(DEMO_EXECUTABLES) $(PERL_RUNNABLE_FILES) kl-div
 # Pattern rule
 ALL_CPPFLAGS = $(CPPFLAGS) $(INCLUDEFLAGS) -Ibow -I$(srcdir) -I$(srcdir)/argp $(DEFS)
 ALL_CFLAGS = $(CFLAGS)
-ALL_LIBS = $(LIBS) -L. -lbow -L./argp -largp -lm -lcrypt
+ALL_LIBS = $(LIBS) -L. -lbow -L./argp -largp -lm -lcrypto
 
 
 # Libbow section

@@ -52,7 +52,7 @@ _bow_dv_index_for_di (bow_dv **dv, int di, int error_on_creation)
 {
   int dv_index;			/* The "document vector" index at
 				   which we are looking for. */
-  static inline void grow_if_necessary ()
+  inline void grow_if_necessary ()
     {
       if (error_on_creation)
 	bow_error ("Shouldn't be creating new entry for a weight.");
@@ -67,7 +67,7 @@ _bow_dv_index_for_di (bow_dv **dv, int di, int error_on_creation)
 				       + sizeof (bow_de) * (*dv)->size));
 	}
     }
-  static inline void initialize_dv_index (int dvi)
+  inline void initialize_dv_index (int dvi)
     {
       (*dv)->entry[dvi].di = di;
       (*dv)->entry[dvi].count = 0;

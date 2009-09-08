@@ -37,7 +37,6 @@
 #include <sys/types.h>		/* for netinet/in.h on SunOS */
 #include <sys/stat.h>
 #include <netinet/in.h>		/* for machine-independent byte-order */
-#include <malloc.h>		/* for malloc() and friends. */
 #include <stdlib.h>             /* For malloc() etc. on DEC Alpha */
 #include <string.h>		/* for strlen() on DEC Alpha */
 #include <limits.h>		/* for PATH_MAX and SHRT_MAX and friends */
@@ -46,6 +45,8 @@
 #if BOW_MCHECK
 #include <mcheck.h>
 #endif /* BOW_MCHECK */
+
+#include "argp/argp.h"
 
 #if defined (Windows_NT) && OS == Windows_NT
 #define htonl(a) (a)
@@ -1343,7 +1344,7 @@ if (((*(BARREL)->method->wv_normalize_weights)))	\
 #include <bow/kl.h>
 #include <bow/em.h>
 #include <bow/knn.h>
-struct argp_child;		/* forward declare this type */
+// struct argp_child;		/* forward declare this type */
 
 /* Associate method M with the string NAME, so the method structure
    can be retrieved later with BOW_METHOD_AT_NAME().  Set the group

@@ -19,7 +19,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111, USA */
 
 #include <bow/libbow.h>
-#include <values.h>
+#include <float.h>
 
 static int _bow_barrel_version = -1;
 #define BOW_DEFAULT_BARREL_VERSION 3

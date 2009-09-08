@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
-#include <malloc.h>
 
 /* Find the length of STRING, but scan at most MAXLEN characters.
    If no '\0' terminator is found in that many characters, return MAXLEN.  */

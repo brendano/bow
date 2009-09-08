@@ -22,7 +22,7 @@
 
 #include <math.h>
 #include <string.h>
-#include <values.h>
+#include <float.h>
 #include <time.h>
 #include <signal.h>
 #include <sys/times.h>

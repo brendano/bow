@@ -1,0 +1,97 @@
+AC_INIT(int4str.c)
+
+# configure.in for "libbow".
+# Process this file with autoconf to produce a configure script.
+
+# Let the user set CPPFLAGS and CFLAGS on the ./configure command-line
+AC_SUBST(CPPFLAGS)
+if test -z "$CFLAGS" ; then
+  CFLAGS="-g -O -Wall -Wimplicit"  #provide a default for CFLAGS
+fi
+AC_SUBST(CFLAGS)
+
+# Find the compiler
+AC_PROG_CC
+AC_PROG_CPP
+
+# Find some installation programs
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+AC_PROG_YACC
+AC_PROG_LEX
+
+# Needed by Solaris machines (most other machines have socket stuff in libc)
+AC_CHECK_LIB(socket,main)
+AC_CHECK_LIB(nsl,main)
+
+# Needed by hdb.c
+AC_CHECK_FUNCS(strerror)
+
+# Needed by random.c
+AC_CHECK_FUNCS(gettimeofday)
+AC_CHECK_FUNCS(random)
+AC_CHECK_FUNCS(srandom)
+
+# Needed by lex-simple.c
+AC_CHECK_FUNCS(setenv)
+
+# Needed in various files
+AC_CHECK_FUNCS(strchr)
+AC_CHECK_FUNCS(strrchr)
+
+# Needed by weight.c
+AC_CHECK_FUNCS(log2f)
+AC_CHECK_FUNCS(sqrtf)
+
+# Needed by svm_*.c on some systems
+AC_EGREP_CPP(fpsetmask,
+	[#include <floatingpoint.h>
+         #ifdef fpsetmask
+          fpsetmask
+         #endif
+         ], echo "#define HAVE_FPSETMASK 1" >> confdefs.h
+)
+
+# Needed on DEC alpha machines
+AC_CHECK_HEADERS(alloca.h)
+
+# Find location of the perl interpreter executable
+#  first look for `perl5'
+AC_PATH_PROG(PERL, perl5)
+#  if it isn't found, look for `perl'
+if test -z "$PERL" ; then
+  AC_PATH_PROG(PERL, perl)
+fi
+AC_SUBST(PERL)
+
+# Find out if `__attribute__ ((constructor))' works.  If it doesn't,
+# define CONSTRUCTOR_FAILS.
+AC_MSG_CHECKING(if __attribute__((constructor)) works)
+AC_TRY_RUN(
+	int did_foo = 0;
+	void foo () __attribute__ ((constructor));
+	void foo () {
+	  did_foo = 1;
+	}
+	main() {
+	  if (did_foo)
+	    exit (0);
+	  exit (-1);
+	},
+CONSTRUCTOR_FAILS=0
+  AC_MSG_RESULT(yes),
+CONSTRUCTOR_FAILS=1; AC_DEFINE(CONSTRUCTOR_FAILS)
+  AC_MSG_RESULT(no),
+CONSTRUCTOR_FAILS=1; AC_DEFINE(CONSTRUCTOR_FAILS)
+  AC_MSG_RESULT(cross-compiling; guessing no)
+)
+	  
+# Look for MSWindows winsock library
+AC_CHECK_LIB(wsock32, main)
+
+# Make AC_OUTPUT call configure in these subdirectories
+AC_CONFIG_SUBDIRS(argp)
+
+# Write the Makefiles
+AC_OUTPUT(Makefile)
+

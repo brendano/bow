@@ -1,0 +1,106 @@
+Bag-Of-Words Library ToDo's
+===========================
+
+* Write bow_barrel_new_from_file(), so we don't get so confused about
+  NOT closing the FP.
+* Make new versions of structure-file-saving code that take a filename
+  and a directory name.  It will be easier to use them.
+
+* Rename `bow_cdoc->length' to `bow_cdoc->norm'
+* Rename `bow_cdoc->filename' to `bow_cdoc->name'
+* Make `bow_cdoc->class' be a vector of floats.
+* Rename `bow_wi2dvf_dv()' to `bow_wi2dvf_dv_at_wi()'
+* Standardize on use of either `entry' or `entries'.
+* Rename all `2' to `_to_'.
+* Rename all bow_dv_heap* to bow_dvheap*.
+* Rename bow_dv_heap_update() to bow_dvheap_next().
+
+
+* change bow_cdoc->word_count from int to float (or double)
+
+Remove rainbow_classnames
+Are all filename_to_classname() calls still necessary?
+Examine vpc() and fix to take advantage of barrel->classnames.
+In rainbow_print_weight_vector() find the class index more efficiently.
+Likewise for rainbow_print_foilgain()
+Rename bow_free_barrel() to bow_barrel_free...something.
+Free heaps in places that they are not!
+Rename bow_prune_words_by_doc_count_n to bow_prune_vocab_by_doc_count_n
+Change all occurrences of "prune" to "hide".
+Take a look at (lex-suffixing.c)bow_lexer_suffixing_get_word - might want
+  to change bow_lexer_html_get_raw_word to bow_default_lexer->get_word
+
+Replied: Mon, 02 Feb 1998 13:55:04 -0500
+Replied: ""L. Douglas Baker" <ldbapp@cs.cmu.edu> "
+Return-Path: ldbapp@cs.cmu.edu 
+Received: from tera.jprc.com (TERA.JPRC.COM [207.86.147.221])
+	by sandbox.jprc.com (8.8.5/8.8.5) with SMTP id NAA04318
+	for <mccallum@sandbox.jprc.com>; Mon, 2 Feb 1998 13:52:04 -0500
+Received: from LDBAPP.JPRC.COM (LDBAPP.JPRC.COM [207.86.147.208]) by tera.jprc.com (NTMail 3.03.0014/1.agyw) with ESMTP id ta116551 for <mccallum@sandbox.jprc.com>; Mon, 2 Feb 1998 13:52:31 -0500
+Message-Id: <3.0.32.19980202135303.009a64c0@mail.jprc.com>
+X-Sender: ldbapp@mail.jprc.com
+X-Mailer: Windows Eudora Pro Version 3.0 (32)
+Date: Mon, 02 Feb 1998 13:53:05 -0500
+To: Andrew McCallum <mccallum@jprc.com>
+From: "L. Douglas Baker" <ldbapp@cs.cmu.edu>
+Subject: bow comments
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+
+
+Andrew,
+
+Here are some comments I wrote down when I was learning my way around bow.
+You said you'd like to see these someday.  They are things that I think
+might need to be explaining in any bow documentation that might get written
+in the future.
+
+-Doug
+
+----------------------------------------------------------------------------
+----
+These are "gotchas" that should be addressed in any documentation that is
+written about the bag of words library.
+----------------------------------------------------------------------------
+----
+
+The document vectors in a barrel are not all loaded at the beginning, but are
+loaded only on demand.  Thus, to access one you should use bow_wi2dvf_dv().
+
+The documents in a bow_dv are not in the array in any particular order.  To
+access one you should use _bow_dv_index_for_di().  However, if you try to
+access
+a di that does not exist, this function will automatically make space for it.
+Maybe there should be a similar function that returns NULL if the requested di
+does not exist.
+
+There is a function bow_wi2dvf_dv(bow_wi2dvf *, int) which returns a dv*
+from a
+wi2dvf.  This would make you think that you should acess the dv's this way:
+        dv1 = bow_wi2dvf_dv(wi2dvf, wi);
+But then there is a function
+bow_dv_add_di_count_weight(bow_dv**, int, int, float) that modifies the
+entries
+in the dv.  You'd think that if you accessed a dv as above, you could then add
+to it like this:
+        bow_dv_add_di_count_weight(&dv1, di, count, weight);
+But this won't work because the original dv that you really should be
+accessing
+is wi2dvf->entry[wi].dv.  Changing dv1 only changes a (presumably) local
+variable.
+
+----------------------------------------------------------------------------
+----
+Other Questions
+----------------------------------------------------------------------------
+----
+
+What is the protocol regarding "hidden" words?
+
+Are the wi's guaranteed to span the range 0..n with no holes?
+
+What is the difference between size and num_words, or length in all
+the structures?  Are the differences consistent throughout?  It seems
+like size is the number of items for which memory has been allocated
+and num_words or length is the number of items that are actually being
+used.

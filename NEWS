@@ -1,0 +1,47 @@
+* New since libbow version 0.9
+
+New classification methods have been added:  maxent, svm, active,
+nbshrinkage. 
+
+New libbow front-ends have been released:  crossbow (document
+clustering), archer (AltaVista-style document retrieval).
+
+Many bug fixes.
+
+
+* New since libbow version 0.8.
+
+The command-line arguments for setting test-train splits have
+changed.  The -p option has been removed.  There are new options
+--test-set and --train-set.
+
+In the absence of any test-train split command-line options,
+previously the default test-train split was 30% testing, 70% training.
+Now the new default is 0% test, 100% train.  Thus, you must specify
+some test-train split on the command-line for non-diagnostic
+classification runs, such as runs with --test option.
+
+The --split-seed option has been renamed to --random-seed.
+
+Changed "infogain-vector" to "print-word-infogain".  
+Changed "infogain-pair-vector" to "print-word-pair-infogain".  
+Changed "weight-vector" to "print-word-weights".  
+Changed "foilgain-vector" to "print-word-foilgain".
+
+
+* New since libbow version 0.6.
+
+The library and its front-ends now take GNU-style long-options.  For
+example, to see the new rainbow options, execute "./rainbow --help".
+
+NOTE: Several of the options have changed.  For example, `-R' should
+be replaced with `-O'.  
+
+WARNING: One of the options as reversed meaning!  Pre-version-0.7,
+stemming was on by default; `-S' turned it off; now, stemming is
+turned off by default; `-S' will turn it on.
+
+WARNING: The data file format for models have changed.  You will have
+to re-build any rainbow or arrow models you created with libbow
+version 0.6.  Otherwise rainbow or arrow will crash when reading in
+the old models.

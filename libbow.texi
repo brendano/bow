@@ -1,0 +1,358 @@
+\input texinfo @c -*-texinfo-*-
+
+@c %**start of header
+@setfilename libbow.info
+@settitle Programmer's Guide to BOW
+@c %**end of header
+
+@ifinfo
+@format
+START-INFO-DIR-ENTRY
+* Libbow::                      Bag-Of-Words Library
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+
+@c set the vars BOWVERSION
+@include version.texi
+
+@ifinfo
+This file documents the features and implementation of Libbow.
+
+Copyright (C) 1996, 1997, 1998 Free Software Foundation, Inc.
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that the
+section entitled ``GNU Library General Public License'' is included exactly as
+in the original, and provided that the entire resulting derived work is
+distributed under the terms of a permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that the section entitled ``GNU Library General Public License'' and
+this permission notice may be included in translations approved by the
+Free Software Foundation instead of in the original English.
+@end ifinfo
+
+@titlepage
+@title Programmer's Guide to BOW
+@subtitle A library of C code for statistical text processing.
+@sp 3
+@c @subtitle last updated October 1996
+@subtitle Version @value{BOWVERSION}
+@author Andrew Kachites McCallum (mccallum@@cs.cmu.edu)
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1996, 1997 Andrew Kachites McCallum.
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that the
+section entitled ``GNU Library General Public License'' is included exactly as
+in the original, and provided that the entire resulting derived work is
+distributed under the terms of a permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that the section entitled ``GNU Library General Public License'' may be
+included in a translation approved by the author instead of in the original
+English.
+@end titlepage
+
+@node Top, Overview, (dir), (dir)
+
+@ifinfo
+This manual documents how to install and use @samp{libbow}),
+(a library of C code for statistical text processing),
+version @value{BOWVERSION}.
+@end ifinfo
+
+@menu
+* Overview::                    
+* Traversing Diretories to find Text Files::  
+* Getting Words from Text Files::  
+* Mapping between Words and Integers::  
+* Word Vectors::                
+* Vectors of Documents::        
+* A Matrix of Document/Word Statistics::  
+* Document/Word Models::        
+* Vector-per-Class Models::     
+* Arrays of Structures::        
+* Command-line argument processing with Argp::  
+@end menu
+
+@node Overview, Traversing Diretories to find Text Files, Top, Top
+@chapter Overview
+
+@include libbow-desc.texi
+
+Pronounciation guide: "libbow" rhymes with "lib-low", not "lib-cow".
+
+
+Notes from Devika:
+
+How to delimit documents.
+How to tag things---how to augment the lexers.
+Lead in gently, steps.  Big picture.... more and more interesting things
+Variety of examples.
+Guide to sea of command-line references.  Structure.
+When to consider using which switch.
+Sensible defaults.
+
+
+
+
+@node Traversing Diretories to find Text Files, Getting Words from Text Files, Overview, Top
+@chapter Traversing Diretories to find Text Files
+
+
+@node Getting Words from Text Files, Mapping between Words and Integers, Traversing Diretories to find Text Files, Top
+@chapter Getting Words from Text Files
+
+Lexer buffers, Lexers
+
+@menu
+* The Simple Lexer::            
+* The N-Gram Lexer::            
+* The Email/News Lexer::        
+* The HTML Lexer::              
+* Functions Useful for Writing Lexers::  
+@end menu
+
+@node The Simple Lexer, The N-Gram Lexer, Getting Words from Text Files, Getting Words from Text Files
+@section The Simple Lexer
+
+@node The N-Gram Lexer, The Email/News Lexer, The Simple Lexer, Getting Words from Text Files
+@section The N-Gram Lexer
+
+@node The Email/News Lexer, The HTML Lexer, The N-Gram Lexer, Getting Words from Text Files
+@section The Email/News Lexer
+
+@node The HTML Lexer, Functions Useful for Writing Lexers, The Email/News Lexer, Getting Words from Text Files
+@section The HTML Lexer
+
+@node Functions Useful for Writing Lexers,  , The HTML Lexer, Getting Words from Text Files
+@section Functions Useful for Writing Lexers
+
+@deftypefun int bow_stem_porter (char *@var{word})
+Apply the Porter stemming algorithm to modify @var{word}.  Return 0 on success.
+@end deftypefun
+
+@deftypefun int bow_isalpha (int @var{character})
+A function wrapper around POSIX's @code{isalpha} macro.
+@end deftypefun
+
+@deftypefun int bow_isgraph (int @var{character})
+A function wrapper around POSIX's @code{isgraph} macro.
+@end deftypefun
+
+@deftypefun int bow_stoplist_present (const char *@var{word})
+Return non-zero if @var{word} is on the stoplist.
+@end deftypefun
+
+@deftypefun int bow_stoplist_add_from_file (const char *@var{filename})
+Add to the stoplist the white-space delineated words from
+@var{filename}.  Return the number of words added.  If the file could
+not be opened, return -1.
+@end deftypefun
+
+
+
+@node Mapping between Words and Integers, Word Vectors, Getting Words from Text Files, Top
+@chapter Mapping between Words and Integers
+
+@menu
+* Generic Maps between Integers and Strings::  
+* The Global Dictionary::       
+@end menu
+
+@node Generic Maps between Integers and Strings, The Global Dictionary, Mapping between Words and Integers, Mapping between Words and Integers
+@section Generic Maps between Integers and Strings
+
+@deftp {} bow_int4str
+@end deftp
+
+@deftypefun {bow_int4str *} bow_int4str_new (int @var{capacity})
+Allocate, initialize and return a new int/string mapping structure.  The
+parameter @var{capacity} is used as a hint about the number of words to
+expect; if you don't know or don't care about a @var{capacity} value,
+pass 0, and a default value will be used.
+@end deftypefun
+
+@deftypefun {const char *} bow_int2str (bow_int4str *@var{map}, int @var{index})
+Given a integer @var{index}, return its corresponding string.
+@end deftypefun
+
+@deftypefun int bow_str2int (bow_int4str *@var{map}, const char *@var{string})
+Given the char-pointer @var{string}, return its integer
+index.  If this is the first time we're seeing @var{string}, add it to
+the mapping, assign it a new index, and return the new index.
+@end deftypefun
+
+@deftypefun int bow_str2int_no_add (bow_int4str *@var{map}, const char *@var{string})
+Given the char-pointer @var{string}, return its integer index.  If
+@var{string} is not yet in the mapping, return -1.
+@end deftypefun
+
+@deftypefun void bow_int4str_write (bow_int4str *@var{map}, FILE *@var{fp})
+Write the int-str mapping to file-pointer @var{fp}.
+@end deftypefun
+
+@deftypefun {bow_int4str *} bow_int4str_new_from_fp (FILE *@var{fp})
+Return a new int-str mapping, created by reading file-pointer @var{fp}.
+@end deftypefun
+
+@deftypefun {bow_int4str *} bow_int4str_new_from_file (const char *@var{filename})
+Return a new int-string mapping, created by reading @var{filename}.
+@end deftypefun
+
+@deftypefun void bow_int4str_free (bow_int4str *@var{map})
+Free the memory held by the int-string mapping @var{map}.
+@end deftypefun
+
+
+
+
+@node The Global Dictionary,  , Generic Maps between Integers and Strings, Mapping between Words and Integers
+@section The Global Dictionary
+
+@deftypefun {const char *} bow_int2word (int @var{wi})
+Given a "word index" @var{wi}, return its word, according to the global
+word-int mapping.
+@end deftypefun
+
+@deftypefun int bow_word2int (const char *@var{word});
+Given a @var{word}, return its ``word index,'' according to the global
+word-int mapping; if it's not yet in the mapping, add it.
+@end deftypefun
+
+@deftypefun int bow_word2int_add_occurrence (const char *@var{word})
+Like @code{bow_word2int()}, except it also increments the occurrence
+count associated with @var{word}.
+@end deftypefun
+
+@deftypevar int bow_word2int_do_not_add
+If this is non-zero, then @code{bow_word2int()} will return -1 when
+asked for the index of a word that is not already in the mapping.
+Essentially, setting this to non-zero makes @code{bow_word2int()} and
+@code{bow_word2int_add_occurrence()} behave like
+@code{bow_str2int_no_add()}.
+@end deftypevar
+
+@deftypefun int bow_words_add_occurrences_from_text_dir (const char *@var{dirname}, const char *@var{exception_name})
+Add to the word occurrence counts by recursively decending directory 
+@var{dirname} and lexing all the text files; skip any files matching
+@var{exception_name}.
+@end deftypefun
+
+@deftypefun int bow_words_occurrences_for_wi (int @var{wi});
+Return the number of times @code{bow_word2int_add_occurrence()} was
+called with the word whose index is @var{wi}.
+@end deftypefun
+
+@deftypefun void bow_words_set_map (bow_int4str *@var{map}, int @var{free_old_map})
+Replace the current word/int mapping with @var{map}.
+@end deftypefun
+
+@deftypefun void bow_words_remove_occurrences_less_than (int @var{occur});
+Modify the int/word mapping by removing all words that occurred less
+than @var{occur} number of times.  WARNING: This totally changes the
+word/int mapping; any @code{wv}'s, @code{wi2dvf}'s or @code{barrel}'s
+you build with the old mapping will have bogus word indices afterward.
+@end deftypefun
+
+@deftypefun int bow_num_words ()
+Return the total number of unique words in the int/word map.
+@end deftypefun
+
+@deftypefun void bow_words_write (FILE *@var{fp})
+Save the int/word map to file-pointer @var{FP}.
+@end deftypefun
+
+@deftypefun void bow_words_write_to_file (const char *@var{filename})
+Same as above, but with a filename instead of a @code{FILE*}.
+@end deftypefun
+
+@deftypefun void bow_words_read_from_fp (FILE *@var{fp})
+Read the int/word map from file-pointer @var{fp}.
+@end deftypefun
+
+@deftypefun void bow_words_read_from_file (const char *@var{filename})
+Same as above, but with a filename instead of a @code{FILE*}.
+@end deftypefun
+
+@deftypefun void bow_words_reread_from_file (const char *@var{filename}, int @var{force_update})
+Same as above, but don't bother rereading unless @var{filename} is different
+from the last one, or @var{force_update} is non-zero.
+@end deftypefun
+
+
+
+@node Word Vectors, Vectors of Documents, Mapping between Words and Integers, Top
+@chapter Word Vectors
+
+@menu
+* Creating a Word Vector from a Text File::  
+* Writing and Reading Word Vectors as Data Files::  
+@end menu
+
+@node Creating a Word Vector from a Text File, Writing and Reading Word Vectors as Data Files, Word Vectors, Word Vectors
+@section Creating a Word Vector from a Text File
+
+@node Writing and Reading Word Vectors as Data Files,  , Creating a Word Vector from a Text File, Word Vectors
+@section Writing and Reading Word Vectors as Data Files
+
+
+@node Vectors of Documents, A Matrix of Document/Word Statistics, Word Vectors, Top
+@chapter Vectors of Documents
+
+@deftp Type bow_dv
+@end deftp
+
+
+@node A Matrix of Document/Word Statistics, Document/Word Models, Vectors of Documents, Top
+@chapter A Matrix of Document/Word Statistics
+
+@deftp Type bow_dvf
+@end deftp
+
+@deftp Type bow_wi2dvf
+@end deftp
+
+
+@node Document/Word Models, Vector-per-Class Models, A Matrix of Document/Word Statistics, Top
+@chapter Document/Word Models
+
+@deftp Type bow_barrel
+@end deftp
+
+
+@node Vector-per-Class Models, Arrays of Structures, Document/Word Models, Top
+@chapter Vector-per-Class Models
+
+
+@node Arrays of Structures, Command-line argument processing with Argp, Vector-per-Class Models, Top
+@chapter Arrays of Structures
+
+@menu
+* Arrays indexed by integers::  
+* Arrays indexed by strings::   
+@end menu
+
+@node Arrays indexed by integers, Arrays indexed by strings, Arrays of Structures, Arrays of Structures
+@section Arrays indexed by integers
+
+@node Arrays indexed by strings,  , Arrays indexed by integers, Arrays of Structures
+@section Arrays indexed by strings
+
+@node Command-line argument processing with Argp,  , Arrays of Structures, Top
+@chapter Command-line argument processing with Argp
+
+@bye

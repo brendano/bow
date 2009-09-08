@@ -1,0 +1,60 @@
+Documentation and updates for `libbow' are available at
+http://www.cs.cmu.edu/~mccallum/bow
+
+Rainbow is a C program that performs document classification using one
+of several different methods, including naive Bayes, TFIDF/Rocchio,
+K-nearest neighbor, Maximum Entropy, Support Vector Machines, Fuhr's
+Probabilitistic Indexing, and a simple-minded form a shrinkage with
+naive Bayes.
+
+Rainbow's accompanying library, `libbow', is a library of C code
+intended for support of statistical text-processing programs.  The
+current source distribution includes the library, a text classification
+front-end (rainbow), a simple TFIDF-based document retrieval front-end
+(arrow), an AltaVista-style document retrieval front-end (archer), and a
+unsupported document clustering front-end with hierarchical clustering
+and deterministic annealing (crossbow).
+
+@format
+The library provides facilities for:
+ *  Recursively descending directories, finding text files.
+ *  Finding `document' boundaries when there are multiple docs per file.
+ *  Tokenizing a text file, according to several different methods.
+ *  Including N-grams among the tokens.
+ *  Mapping strings to integers and back again, very efficiently.
+ *  Building a sparse matrix of document/token counts.
+ *  Pruning vocabulary by occurrence counts or by information gain.
+ *  Building and manipulating word vectors.
+ *  Setting word vector weights according to NaiveBayes, TFIDF, and a
+     simple form of Probabilistic Indexing.
+ *  Scoring queries for retrieval or classification.
+ *  Writing all data structures to disk in a compact format.
+ *  Reading the document/token matrix from disk in an efficient,
+     sparse fashion.
+ *  Performing test/train splits, and automatic classification tests.
+ *  Operating in server mode, receiving and answering queries over a
+     socket. 
+@end format       
+ 
+It is known to compile on most UNIX systems, including Linux, Solaris,
+SUNOS, Irix and HPUX.  Six months ago, it compiled on WindowsNT (with
+a GNU build environment); it would probably work again with little
+effort.  Patches to the code are most welcome.
+
+It is relatively efficient.  Reading, tokenizing and indexing the raw
+text of 20,000 UseNet articles takes about 3 minutes.  Building a
+naive Bayes classifier from 10,000 articles, and classifying the other
+10,000 takes about 1 minute.
+
+The code conforms to the GNU coding standards.  It is released under the
+Library GNU Public License (LGPL).
+
+@format
+The library does not:
+        Have parsing facilities.
+        Do smoothing across N-gram models.
+        Claim to be finished.
+        Have good documentation.
+        Claim to be bug-free.
+        ...many other things.
+@end format

@@ -1,0 +1,74 @@
+This file provides information for developers of `libbow'.
+
+Source code revision control
+============================
+
+   The BOW software package is revision-control-maintained as a CVS
+   repository, with CVS version 1.9.
+
+   CVS is available at ftp://ftp.gnu.org.  Documentation is
+   available in texinfo format.
+
+   The repository used to be publically available, but due to firewall
+   constraints is not longer.  If you are inside the firewall and have
+   checked out libbow, in order to compile libbow, you'll have to
+   create `./configure' from `./configure.in' by typing (in the bow
+   directory)
+
+      autoconf
+      (cd argp ; autoconf)
+
+   You must have the autoconf program installed on your system.  It is
+   available from ftp://ftp.gnu.org/pub/gnu or its mirrors.
+
+
+Coding standards
+================
+
+    BOW coding follows the GNU coding standards.  The standards are
+    described in a text file at 
+    ftp://ftp.gnu.org/pub/gnu/GNUinfo/standards/standards.text
+
+    Please follow these standards in your code additions to BOW.
+
+
+CVS and ChangeLog and emacs
+===========================
+
+   BOW uses a GNU-style ChangeLog to document source code changes.
+   Please read the section of the GNU Coding Standards that describes
+   appropriate kinds of entries.
+
+   Please, please, please make a ChangeLog entry and CVS Commit Log
+   Message for every change you commit.
+
+   This process is highly facilitated by the use of emacs' cvs-mode,
+   and following emacs-lisp code:
+
+     (add-hook 'vc-checkin-hook 'vc-checkin-add-log)
+     ;;; Insert the file's new log entries in ChangeLog.
+     (defun vc-checkin-add-log ()
+       (let ((log (find-change-log)))
+         (and log
+     	 (y-or-n-p (format "Update %s for %s changes? "
+     			   (file-relative-name log)
+     			   (file-relative-name buffer-file-name)))
+     	 (vc-comment-to-change-log nil log))))
+     (defadvice vc-checkin (around guess-defun compile activate)
+       "Insert a guessed defun name from `add-log-current-defun'."
+       (let ((defun-guess (and (not (ad-get-arg 2))
+     			  (equal (abbreviate-file-name
+     				  (file-truename (ad-get-arg 0)))
+     				 buffer-file-truename)
+     			  (add-log-current-defun))))
+         (prog1 ad-do-it
+           (if defun-guess
+     	  (insert "(" defun-guess "): ")))))
+     (setq vc-make-backup-files t)
+     (setq vc-initial-comment t)
+     
+   Read the information about emacs' interface to CVS in the emacs
+   texinfo documentation.  The above code adds extra functionality to
+   this interface---it offers to automatically create a ChangeLog
+   entry from the CVS commit message you type in the `*VC-Log*'
+   buffer.

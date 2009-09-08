@@ -1,0 +1,82 @@
+AC_INIT(argp.h)
+
+# configure.in for "libargp".
+# Process this file with autoconf to produce a configure script.
+
+# Let the user set CPPFLAGS and CFLAGS on the ./configure command-line
+AC_SUBST(CPPFLAGS)
+if test -z "$CFLAGS" ; then
+  CFLAGS="-g -O -Wall"  #provide a default for CFLAGS
+fi
+AC_SUBST(CFLAGS)
+
+# Find the compiler
+AC_PROG_CC
+AC_PROG_CPP
+
+# Find some installation programs
+AC_PROG_INSTALL
+AC_PROG_RANLIB
+
+# Find out if we have getopt.h
+AC_CHECK_HEADERS(getopt.h)
+
+# Find out if we have the function getopt_long().  If we don't have
+# it, cause the ARGP_GETOPT_O_FILES to be a part of libargp.
+AC_CHECK_FUNCS(getopt_long,
+  ARGP_GETOPT_O_FILES='',
+  ARGP_GETOPT_O_FILES='$(ARGP_GETOPT_O_FILES)')
+AC_SUBST(ARGP_GETOPT_O_FILES)
+
+# Find out if we have the function strerror()
+AC_CHECK_FUNCS(strerror)
+
+# Needed by argp-help.c
+AC_CHECK_FUNCS(strndup)
+
+# Needed by argp-fmtstream.h
+AC_CHECK_TYPE(ssize_t, int)
+
+# Needed by argp-fmtstream.c
+AC_CHECK_FUNCS(memmove vsnprintf)
+
+# Needed by argp-help.c
+AC_CHECK_FUNCS(strerror)
+# strcasecmp() is in /usr/include/strings.h on SunOS.
+AC_CHECK_HEADERS(strings.h)
+
+if test -z "$HAVE_VSNPRINTF" ; then
+  # Find out if vsprintf() returns the number of chars written, or 
+  # a pointer to the string
+  AC_MSG_CHECKING(if vsprintf returns int)
+  AC_TRY_RUN(main() {
+	char *buf = malloc(16);
+	if (2 == (int)vsprintf(buf, "12"))
+	  exit (0);
+	exit (-1);},
+   VSPRINTF_RETURNS_INT=1; AC_DEFINE(VSPRINTF_RETURNS_INT)
+    AC_MSG_RESULT(yes),
+   VSPRINTF_RETURNS_INT=0
+    AC_MSG_RESULT(no),
+   VSPRINTF_RETURNS_INT=0
+    AC_MSG_RESULT(guessing no))
+fi
+
+# Find out if the libc has the global variables
+# program_invocation_short_name,program_invocation_name
+AC_MSG_CHECKING(program_invocation_name);
+AC_TRY_LINK(,void foo() {program_invocation_name = "foo";},
+	HAVE_PROGRAM_INVOCATION_NAME=1,)
+if test "$HAVE_PROGRAM_INVOCATION_NAME" = 1 ; then
+  AC_DEFINE(HAVE_PROGRAM_INVOCATION_NAME)
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+
+# Check for ANSI/non-ANSI string functions
+AC_HEADER_STDC
+AC_CHECK_HEADERS(string.h memory.h)
+
+# Write the Makefiles
+AC_OUTPUT(Makefile)

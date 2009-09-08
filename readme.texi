@@ -1,0 +1,121 @@
+@chapter Bag Of Words Library README
+
+@c set the vars BOW_VERSION
+@include version.texi
+
+@samp{libbow}, version @value{BOWVERSION}.
+
+@include libbow-desc.texi
+
+
+@section Rainbow
+
+@samp{Rainbow} is a standalone program that does document
+classification.  Here are some examples:
+
+@itemize @bullet
+
+@item
+
+@example
+rainbow -i ./training/positive ./training/negative
+@end example
+
+Using the text files found under the directories
+@file{./positive} and @file{./negative},
+tokenize, build word vectors, and write the resulting data structures
+to disk.
+
+@item
+
+@example
+rainbow --query=./testing/254
+@end example
+
+Tokenize the text document @file{./testing/254}, and classify it,
+producing output like:
+
+@example
+/home/mccallum/training/positive 0.72
+/home/mccallum/training/negative 0.28
+@end example
+
+@item
+
+@example
+rainbow --test-set=0.5 -t 5
+@end example
+
+Perform 5 trials, each consisting of a new random test/train split and
+outputs of the classification of the test documents.
+
+@end itemize
+
+Typing @samp{rainbow --help} will give list of all rainbow options.
+
+After you have compiled @samp{libbow} and @samp{rainbow}, you can run
+the shell script @file{./demo/script} to see an annotated demonstration
+of the classifier in action.
+
+More information and documentation is available at
+http://www.cs.cmu.edu/~mccallum/bow
+
+
+@format
+Rainbow improvements coming eventually:
+   Better documentation.
+   Incremental model training.
+@end format
+
+
+
+@section Arrow
+
+@samp{Arrow} is a standalone program that does document retrieval by
+TFIDF.  
+
+Index all the documents in directory @samp{foo} by typing
+
+@example
+arrow --index foo
+@end example
+
+Make a single query by typing
+
+@example
+arrow --query
+@end example
+
+then typing your query, and pressing Control-D.
+
+If you want to make many queries, it will be more efficient to run arrow
+as a server, and query it multiple times without restarts by
+communicating through a socket.  Type, for example,
+
+@example
+arrow --query-server=9876
+@end example
+
+And access it through port number 9876.  For example:
+
+@example
+telnet localhost 9876
+@end example
+
+In this mode there is no need to press Control-D to end a query.  Simply
+type your query on one line, and press return.
+
+
+@section Crossbow
+
+@samp{Crossbow} is a standalone program that does document clustering.
+Sorry, there is no documentation yet.
+
+
+@section Archer
+
+@samp{Archer} is a standalone program that does document retrieval with
+AltaVista-type queries, using +, -, "", etc.  The commands in the
+"arrow" examples above also work for archer.  See "archer --help" for
+more information.
+

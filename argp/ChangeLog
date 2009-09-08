@@ -1,0 +1,149 @@
+Fri Jan 30 11:39:54 1998  Andrew McCallum  <mccallum@jprc.com>
+
+	* argp.h (struct argp): Remove "__const" from OPTIONS, so that
+ 	bow_method_register_with_name() can change the GROUP number.
+
+Tue Apr 29 12:58:05 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* Makefile.in (DIST_FILES): Add $(ARGP_GETOPT_C_FILES) and
+ 	$(ARGP_CHECK_C_FILES).
+
+Wed Apr  9 11:31:49 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* configure.in: Add -O to the default CFLAGS.
+
+Tue Apr  8 13:14:55 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* Makefile.in (DIST_FILES): Add argp-fmtstream.h and
+ 	argp-namefrob.h.
+
+Mon Mar 31 12:03:57 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* Makefile.in (configure, config.status): Sprinkle with $(srcdir).
+
+	* configure.in: Move the setting of CFLAGS above AC_PROC_CC, so
+ 	that it will have an effect.
+
+	* configure.in: Do AC_SUBST() for CPPFLAGS and CFLAGS.
+	* Makefile.in (CFLAGS): Set it in configure.
+	(CPPFLAGS): Likewise, and don't put $(DEFS) here; its already in
+	ALL_CPPFLAGS.
+
+Tue Mar 25 13:10:59 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* configure.in: Fix typo.
+
+	* argp-parse.c (__argp_parse): Set PROGRAM_INVOCATION_NAME and
+ 	PROGRAM_INVOCATION_SHORT_NAME if the system doesn't.
+
+	* argp.h: Include <limits.h>.
+	(__option_is_short): Make sure __KEY is less than UCHAR_MAX before
+	passing it to ISPRINT().  On SunOS ISPRINT() uses a lookup-table
+ 	of limited size.
+
+	* argp-ex4.c: Don't include <error.h>; it doesn't appear on my
+ 	RedHat system.
+	(main): Use fprintf() and abort() instead of error().
+
+	* getopt.c: Include <string.h> (for strncmp()).
+
+	* configure.in: Check for the `ssize_t' type.
+
+Tue Mar 25 15:15:53 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* configure.in: Check for memmove, vsnprintf, sterror,
+ 	<strings.h>.  If we don't have vsnprintf(), check to see if
+ 	vsprintf() returns an int or a char*.
+
+	* argp-help.c: Include <strings.h> if we have it.  strcasecmp() is
+ 	defined there on SunOS.
+	(canon_doc_option): As ISSPACE(**NAME), not ISSPACE(*NAME).  Likewise
+	with ISALNUM().
+	(__argp_failure): Use work around if we don'thave STRERROR().
+
+	* argp-fmtstream.c: Include <assert.h>.  Define memmove() with
+ 	bcopy() if we don't have memmove(). Define PRINTF_SIZE_GUESS to be
+ 	larger if we don't have vsnprintf().
+	(__argp_fmtstream_printf): Implement vsnprintf() in terms of
+	vsprintf() if we don't have vsnprintf().
+
+Fri Mar 14 10:15:00 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* Makefile.in (snap): New target.
+
+	* Makefile.in (ARGP_C_FILES): Add new files from argp-x10.
+	(ARGP_CHECK_C_FILES): New variable.
+	(ARGP_CHECK_O_FILES): New variable.
+	(ARGP_CHECK_PROGRAMS): New variable.
+	(ALL_CPPFLAGS, ALL_CFLAGS): New variables.
+	(.c.o): New pattern rule, using above two variables.
+	(checks, $(ARGP_CHECK_PROGRAMS)): New targets.
+
+	* argp.h: Declare extern program_invocation_name and
+ 	program_invocation_short_name if configure didn't find them.
+	* configure.in: Check for strndup and program_invocation_name.
+
+	* pin.c: New file.
+
+	* All files updated from Miles Bader's argp-x10 release from
+	ftp://alpha.gnu.ai.mit.edu/gnu/.
+
+Tue Feb  4 13:14:01 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* Makefile.in (scmdir): Variable removed.
+
+Mon Feb  3 14:03:56 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* argp1.h: Include both <memory.h> and <strings.h>, even though
+ 	they may conflict on some systems.
+
+	Resolve issues of alternate string functions, like rindex().
+	* configure.in: Check for ANSI/non-ANSI string functions.
+	* Makefile.in (DIST_FILES): Add argp1.h.
+	* argp-help.c: Include "argp1.h".
+	(argp_failure): Deal if we don't HAVE_STRERROR.
+	* argp-parse.c: Include "argp1.h".
+	* configure.in: Look for strerror().
+
+	Provide getopt_long() if the host system doesn't have it.
+	* Makefile.in (CPPFLAGS): Add $(DEFS).
+	(ARGP_GETOPT_C_FILES, ARGP_GETOPT_O_FILES): New variables.
+	(libargp.a): Depend on @ARGP_GETOPT_O_FILES@, which is set by
+	configure if getopt_long isn't found.
+	(DIST_FILES): Add getopt.h.
+	(clean): Also remove tester.
+	(tester): Depend on libargp.a.
+	* argp.h: Include "getopt.h" if we don't HAVE_GETOPT_H.
+	* configure.in: Look for getopt_long, and cause libargp to include
+ 	it if it isn't found.
+	* getopt.c, getopt1.c, getopt.h: New files.
+
+	* tester.c: Remove some unused variables, and prevent other
+ 	warnings.
+
+Thu Jan 30 10:26:34 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	* argp.h: Include <string.h>.
+
+	* argp-parse.c: Don't include <getopt.h>.
+
+	* argp-help.c: Don't use //-style comments.
+
+	* argp.h: Only include <getopt.h> if we have it.
+
+	* configure.in: Check for getopt.h.
+
+	* argp-help.c (hol_entry_help): Since the DOC string doesn't
+ 	properly start on the same line as the options, and doesn't indent
+ 	properly, indent it by 3 spaces here.
+
+	* argp-help.c (make_hol): Set HOL->CLUSTERS and HOL->SHORT_OPTIONS
+ 	to zero, so we don't crash when the program is given no
+ 	command-line arguments.
+
+Wed Jan 29 14:21:52 1997  Andrew McCallum  <mccallum@jprc.com>
+
+	Comment-out and massage many sections that use the `linewrap'
+ 	functions (which are only found in GNU libc).  Remove other
+	dependancies on GNU libc.
+	

@@ -1,0 +1,11 @@
+This is Andrew McCallum's <mccallum@jprc.com> modification of Miles
+Bader's `argp' functions.
+
+`argp' is a collection of functions in GNU libc 2.x that provides
+powerful command-line argument processing and automated usage message
+printing.
+
+Andrew McCallum modified it by pulling it out into a separate library,
+and removing its dependancies on GNU libc.  The result doesn't produce
+usage messages that are nearly as pretty, but at least it compiles on
+SunOS and other OS's with inferior libc's.

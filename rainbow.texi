@@ -1,0 +1,5 @@
+\input texinfo @c -*-texinfo-*-
+
+Documentation for @samp{rainbow} has not yet been written.
+
+@bye

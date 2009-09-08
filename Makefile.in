@@ -47,7 +47,7 @@ LIBS = @LIBS@
 
 # All these are optional.  You can redifine CFLAGS, CPPFLAGS,
 # INCLUDEFLAGS and LDFLAGS on the command line however you like.
-CFLAGS = @CFLAGS@
+CFLAGS = @CFLAGS@ -fnested-functions
 CPPFLAGS = @CPPFLAGS@
 INCLUDEFLAGS =
 LDFLAGS =

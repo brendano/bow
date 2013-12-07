@@ -40,6 +40,15 @@
 #define log2f log
 #endif
 
+#ifndef MAXFLOAT
+#ifdef FLT_MAX
+#define MAXFLOAT FLT_MAX
+#else
+#define MAXFLOAT 3.40282347e+38F
+#endif
+#endif
+
+
 /* this macro returns a float, which should be enough since b is only used in
  * 1 addition & the range of differences is not large */
 #define GET_CDOC_ARRAY_EL(barrel,i) \

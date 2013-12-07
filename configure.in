@@ -20,6 +20,15 @@ AC_PROG_RANLIB
 AC_PROG_YACC
 AC_PROG_LEX
 
+# Needed for Mac OS X
+gcc -c  -I.  -DHAVE_GETOPT_H=1 -DHAVE_GETOPT_LONG=1 -DHAVE_STRERROR=1 -DHAVE_STRNDUP=1 -DSTDC_HEADERS=1 -DHAVE_MEMMOVE=1 -DHAVE_VSNPRINTF=1 -DHAVE_STRERROR=1 -DHAVE_STRINGS_H=1 -DVSPRINTF_RETURNS_INT=1 -DSTDC_HEADERS=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1  -g -O -Wall -D__OPTIMIZE__=1 -o argp-xinl.o argp-xinl.c
+
+case $host_os in
+     darwin*)
+     	#AC_MSG_NOTICE([Adding -fnested-functions to CFLAGS])
+        CFLAGS="$CFLAGS -fnested-functions"
+esac
+
 # Needed by Solaris machines (most other machines have socket stuff in libc)
 AC_CHECK_LIB(socket,main)
 AC_CHECK_LIB(nsl,main)

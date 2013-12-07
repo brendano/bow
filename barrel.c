@@ -598,7 +598,7 @@ bow_barrel_new_from_data_file (const char *filename)
 /* Read a line from FP until a newline, and return a newly malloc'ed
    buffer containing the line read. */
 char *
-getline (FILE *fp)
+bow_getline (FILE *fp)
 {
   int bufsize = 1024;
   int buflen = 0;
@@ -710,7 +710,7 @@ bow_barrel_new_from_printed_barrel_file (const char *filename,
   fp = bow_fopen (filename, "r");
 
   /* Each time through the loop reads one line. */
-  while ((buf = getline (fp)))
+  while ((buf = bow_getline (fp)))
     {
       line = buf;
       if (sscanf (line, "%s%n", datafilename, &num_chars_read) != 1)

@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 # The above line is modified by ./Makefile to match the system's
 # installed location for Perl.
 
